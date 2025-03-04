@@ -1,0 +1,45 @@
+%load_ext sql
+%sql mysql://<username>:<password>@<host>:<port>/<database_name>
+
+# Execute the previously defined SQL queries and stored procedures here
+%sql SELECT * FROM customers WHERE country = 'France'; 
+%sql SELECT COUNT(*) FROM orders WHERE YEAR(orderDate) = 2003; 
+# ... (other queries)
+
+# Call the stored procedure
+%sql CALL GetTotalRevenueForYear(2003); 
+
+# Retrieve data from the view
+%sql SELECT * FROM CustomerTotalOrdersView; 
+
+# Print the results of the queries
+print(sql.tables()) 
+
+# Fetch and display results of a query
+import pandas as pd
+df_customers_france = %sql SELECT * FROM customers WHERE country = 'France';
+print(df_customers_france) 
+
+# Call the stored procedure with parameter and handle potential errors
+try:
+    %sql CALL GetTotalRevenueForYear(2025); 
+except Exception as e:
+    print(f"Error: {e}") 
+
+# Use pandas for data manipulation and analysis
+df_orders = %sql SELECT orderDate, SUM(quantityOrdered * priceEach) as total_sales 
+               FROM orders o 
+               JOIN orderdetails od ON o.orderNumber = od.orderNumber 
+               GROUP BY orderDate;
+
+# Advanced Query with pandas
+df_customer_totals = %sql SELECT c.customerNumber, c.customerName, 
+                         SUM(od.quantityOrdered * od.priceEach) as total_order_value
+                         FROM customers c 
+                         JOIN orders o ON c.customerNumber = o.customerNumber
+                         JOIN orderdetails od ON o.orderNumber = od.orderNumber
+                         GROUP BY c.customerNumber, c.customerName;
+
+# Find top 5 customers by total order value using pandas
+top_5_customers = df_customer_totals.nlargest(5, 'total_order_value') 
+print(top_5_customers)
