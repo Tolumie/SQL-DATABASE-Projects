@@ -54,11 +54,11 @@ Below are the SQL database projects included in this repository:
 ## 🚀 **How to Use**
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/Tolumie/SQL-DATABASE-Projects-MySQL-SQLite-IBMDB2.git
+   git clone https://github.com/Tolumie/SQL-DATABASE-Projects.git
    ```
 2. **Navigate into the Folder:**
    ```bash
-   cd SQL-DATABASE-Projects-MySQL-SQLite-IBMDB2
+   cd SQL-DATABASE-Projects
    ```
 3. **Open Jupyter Notebook (For Python + SQL Integration Projects):**
    ```bash
